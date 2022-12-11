@@ -1,0 +1,20 @@
+.note-card {
+  color: #000000;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  resize: both;
+  overflow: auto;
+}
+
+textarea {
+  resize: both;
+  overflow: auto;
+}
+.edit {
+  align-self: flex-end;
+  cursor: pointer;
+  margin: 5px 0px;
+}
