@@ -7,6 +7,9 @@
   flex-direction: column;
   resize: both;
   overflow: auto;
+  cursor: move;
+  position: absolute;
+  z-index: 99999;
 }
 
 textarea {
