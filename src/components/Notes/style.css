@@ -6,6 +6,7 @@
   height: 80%;
   border: 1px dashed #000000;
   position: relative;
+  cursor: pointer;
 }
 
 .cards-area {
@@ -14,4 +15,9 @@
   /* width: 100%;
   height: ; */
   display: flex;
+}
+
+.main-container {
+  width: 100%;
+  height: 100%;
 }

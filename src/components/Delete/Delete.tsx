@@ -1,9 +1,22 @@
+import { FC } from 'react'
+import { useNotesContext } from '../../context/NotesContext'
 import './style.css'
-type Props = {}
+type Props = {
+  id: string
+}
 
-const Delete = (props: Props) => {
+const Delete: FC<Props> = ({ id }: Props) => {
+  const notesContext = useNotesContext()
+  const dragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+  }
+  const drop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    notesContext?.removeNote(id)
+  }
+
   return (
-    <div className='delete'>Delete</div>
+    <div className='delete' onDrop={drop} onDragOver={dragOver}>Delete</div>
   )
 }
 

@@ -1,18 +1,25 @@
 import { useEffect, useRef, useState } from 'react'
 import './style.css'
 
-type Props = {}
+type Props = {
+    drag: () => void
+}
 
-const NoteCard = (props: Props) => {
+const NoteCard = ({ drag }: Props) => {
     const noteCardRef = useRef<HTMLDivElement>(null)
     const [pos1, setPos1] = useState(0);
     const [pos2, setPos2] = useState(0);
     const [pos3, setPos3] = useState(0);
     const [pos4, setPos4] = useState(0);
+
+
+
     useEffect(() => {
         console.log('pos1', pos1, 'pos2', pos2, 'pos3', pos3, 'pos4', pos4, ':::ref:::', noteCardRef.current?.style.top, noteCardRef.current?.style.left);
 
     }, [pos1, pos2, pos3, pos4])
+
+
 
     const dragMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 
@@ -52,7 +59,9 @@ const NoteCard = (props: Props) => {
         document.onmousemove = null;
     }
     return (
-        <div ref={noteCardRef} className='note-card' onMouseDown={dragMouseDown}>
+        <div onDrag={drag} draggable={true} ref={noteCardRef} className='note-card'
+        // onMouseDown={dragMouseDown}
+        >
             <span className="material-symbols-outlined edit">
                 edit
             </span>
