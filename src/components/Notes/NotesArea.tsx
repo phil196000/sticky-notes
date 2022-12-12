@@ -22,7 +22,6 @@ const NotesArea = () => {
                 bgColor: finalColor,
             });
         }
-
     }
 
     return (

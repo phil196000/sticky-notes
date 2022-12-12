@@ -1,4 +1,4 @@
-import { createRef, FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Note, useNotesContext } from "../../context/NotesContext";
 import "./style.css";
 
