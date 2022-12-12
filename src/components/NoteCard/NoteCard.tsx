@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { createRef, FC, useEffect, useRef, useState } from "react";
 import { Note, useNotesContext } from "../../context/NotesContext";
 import "./style.css";
 
@@ -11,10 +11,9 @@ type Props = {
 const NoteCard: FC<Props> = ({ drag, note, index }: Props) => {
     const noteContext = useNotesContext();
     const noteCardRef = useRef<HTMLDivElement>(null);
-    // const [pos1, setPos1] = useState(0);
-    // const [pos2, setPos2] = useState(0);
-    // const [pos3, setPos3] = useState(0);
-    // const [pos4, setPos4] = useState(0);
+    const pos3 = useRef<number>(0);
+    const pos4 = useRef<number>(0);
+
     const [value, setValue] = useState("");
     const [edit, setEdit] = useState(true);
 
@@ -23,77 +22,68 @@ const NoteCard: FC<Props> = ({ drag, note, index }: Props) => {
         setValue(note.text);
     }, [note.text]);
 
-    // const dragMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    //     e = e || window.event;
-    //     e.preventDefault();
-    //     // get the mouse cursor position at startup:
-    //     console.log("mouse drag down ooo", e.clientX, e.clientY);
-    //     setPos3(e.clientX);
-    //     setPos4(e.clientY);
-    //     document.onmouseup = closeDragElement;
-    //     // call a function whenever the cursor moves:
-    //     document.onmousemove = elementDrag;
-    // };
+    const dragMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        noteContext?.updateDisabledAdd();
+        e.preventDefault();
+        e.stopPropagation();
 
-    // const elementDrag = (e: MouseEvent) => {
-    //     e = e || window.event;
-    //     e.preventDefault();
-    //     // calculate the new cursor position:
-    //     setPos1(pos3 - e.clientX);
-    //     setPos2(pos4 - e.clientY);
-    //     setPos3(e.clientX);
-    //     setPos4(e.clientY);
-    //     // set the element's new position:
-    //     if (noteCardRef.current) {
-    //         console.log("in current ref");
-    //         noteCardRef.current.style.top =
-    //             noteCardRef?.current?.offsetTop - pos2 + "px";
-    //         noteCardRef.current.style.left =
-    //             noteCardRef.current.offsetLeft - pos1 + "px";
-    //     }
-    // };
+        pos3.current = e.clientX;
+        pos4.current = e.clientY;
 
-    // const closeDragElement = () => {
-    //     console.log("drag closed");
+        document.onmouseup = closeDragElement;
+        // // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+    };
 
-    //     // stop moving when mouse button is released:
-    //     document.onmouseup = null;
-    //     document.onmousemove = null;
-    // };
+    const elementDrag = (e: MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (noteCardRef.current) {
+            noteCardRef.current.style.top = e.clientY + "px";
+            noteCardRef.current.style.left = e.clientX + "px";
+        }
+    };
+
+    const closeDragElement = (e: MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        // stop moving when mouse button is released:
+        document.onmouseup = null;
+        document.onmousemove = null;
+        if (noteCardRef.current) {
+            noteContext?.addNote({
+                ...note,
+                positionLeft: noteCardRef?.current?.style?.left,
+                positionTop: noteCardRef?.current?.style?.top,
+            });
+        }
+
+        noteContext?.updateDisabledAdd();
+    };
 
     return (
         <div
-            onFocus={() => {
-                console.log(note.text);
-            }}
-            onBlur={() => {
-                console.log("lost", note.text);
-            }}
             style={{
                 top: note.positionTop,
                 left: note.positionLeft,
                 backgroundColor: note.bgColor,
                 zIndex: index + 1,
             }}
-            onDrag={drag}
             draggable={true}
+            onDrag={drag}
             ref={noteCardRef}
             className="note-card"
             onClick={(e: React.MouseEvent<HTMLDivElement>) => {
                 e.stopPropagation();
+                noteContext?.changeItemPostion(note);
             }}
-        // onMouseDown={dragMouseDown} for dragging item
         >
-            <div className="title-container">
-                <span
-                    onClick={() => {
-                        noteContext?.changeItemPostion(note);
-                    }}
-                    className="material-symbols-outlined"
-                >
-                    flip_to_front
-                </span>
-                <h4>Note {index + 1}</h4>
+            <div
+                className="title-container"
+                onMouseDown={dragMouseDown} // for dragging item
+            >
+                <div />
+                <h4>Note</h4>
                 <span
                     onClick={(e) => {
                         e.stopPropagation();
@@ -133,6 +123,7 @@ const NoteCard: FC<Props> = ({ drag, note, index }: Props) => {
                     Save
                 </button>
             )}
+            <p>Drag from here into trash to delete</p>
         </div>
     );
 };

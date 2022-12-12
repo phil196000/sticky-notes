@@ -6,8 +6,8 @@ const useNotesContext = () => useContext(NotesContext);
 export type Note = {
     id: string;
     text: string;
-    positionTop: number;
-    positionLeft: number;
+    positionTop: string;
+    positionLeft: string;
     bgColor: string;
 };
 
@@ -16,6 +16,8 @@ type Notes = {
     addNote: (value: Note) => void;
     removeNote: (id: string) => void;
     changeItemPostion: (value: Note) => void;
+    disableAdd: boolean
+    updateDisabledAdd: () => void
 };
 
 type NotesProviderProps = {
@@ -24,11 +26,14 @@ type NotesProviderProps = {
 
 const NotesProvider = ({ children }: NotesProviderProps) => {
     const [notes, setNotes] = useState<Note[]>([]);
-
+    const [disableAdd, setDisableAdd] = useState(false);
     useEffect(() => {
         fetchNotes();
     }, []);
 
+    const updateDisabledAdd = () => {
+        setDisableAdd(!disableAdd)
+    }
     const fetchNotes = () => {
         const data = localStorage.getItem("notes");
         if (data != null) {
@@ -71,9 +76,11 @@ const NotesProvider = ({ children }: NotesProviderProps) => {
         <NotesContext.Provider
             value={{
                 notes,
+                disableAdd,
                 addNote,
                 removeNote,
                 changeItemPostion,
+                updateDisabledAdd,
             }}
         >
             {children}

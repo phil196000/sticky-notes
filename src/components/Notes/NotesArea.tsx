@@ -7,27 +7,29 @@ import Delete from "../Delete/Delete";
 const NotesArea = () => {
     const notesContext = useNotesContext();
     const [deleteID, setDeleteID] = useState<string | null>(null);
+
+    const addNote = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!notesContext?.disableAdd) {
+            e.preventDefault()
+            e.stopPropagation()
+            const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+            const finalColor = "#" + randomColor;
+            notesContext?.addNote({
+                id: Date.now().toString(),
+                positionLeft: e.clientX + 'px',
+                positionTop: e.clientY + 'px',
+                text: "",
+                bgColor: finalColor,
+            });
+        }
+
+    }
+
     return (
         <div className="main-container">
             <div
                 className="notes-area"
-                onClick={(e) => {
-                    console.log({
-                        id: Date.now().toString(),
-                        positionLeft: e.clientX,
-                        positionTop: e.clientY,
-                        text: "",
-                    });
-                    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-                    const finalColor = "#" + randomColor;
-                    notesContext?.addNote({
-                        id: Date.now().toString(),
-                        positionLeft: e.clientX,
-                        positionTop: e.clientY,
-                        text: "",
-                        bgColor: finalColor,
-                    });
-                }}
+                onClick={addNote}
             >
                 <div className="cards-area">
                     {notesContext?.notes.map((value, index) => {
@@ -38,6 +40,7 @@ const NotesArea = () => {
                                 note={value}
                                 drag={(e) => {
                                     e.preventDefault();
+                                    e.stopPropagation()
                                     setDeleteID(value.id);
                                 }}
                                 key={index}

@@ -39,3 +39,7 @@ button {
   justify-content: space-between;
   padding: 5px 0px;
 }
+p {
+  font-size: 10px;
+  padding-top: 10px;
+}
