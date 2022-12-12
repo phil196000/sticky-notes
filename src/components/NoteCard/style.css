@@ -1,4 +1,5 @@
 .note-card {
+  min-width: 150px;
   color: #000000;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
   padding: 10px;
@@ -9,7 +10,7 @@
   overflow: auto;
   cursor: move;
   position: absolute;
-  z-index: 99999;
+  /* z-index: 99999; */
 }
 
 textarea {
@@ -20,4 +21,21 @@ textarea {
   align-self: flex-end;
   cursor: pointer;
   margin: 5px 0px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px;
+  color: #ffffff;
+  background-color: #000000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 0px;
 }
